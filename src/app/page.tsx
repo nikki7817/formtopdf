@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useFormStore } from "./store/useFormStore";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import ClientPDFDownload from "@/components/ClientPDFDownload";
 import PDFDocument from "@/components/PDFDocument";
 import { useState } from "react";
 
@@ -158,12 +158,12 @@ export default function FormPage() {
 
           {/* Download PDF Button using React-PDF */}
 {isFormValid() ? (
-  <PDFDownloadLink
+  <ClientPDFDownload
     document={<PDFDocument />}
     fileName="form-details.pdf"
     className="flex-1 flex justify-center items-center gap-2 bg-gradient-to-r from-green-700 to-green-600 text-white py-2 rounded-lg font-semibold hover:opacity-90 text-center"
   >
-    {({ loading }) =>
+    {({ loading }: { loading: boolean }) =>
       loading ? (
         "Preparing..."
       ) : (
@@ -177,7 +177,7 @@ export default function FormPage() {
         </>
       )
     }
-  </PDFDownloadLink>
+  </ClientPDFDownload>
 ) : (
   <button
     disabled

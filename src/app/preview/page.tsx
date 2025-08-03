@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import ClientPDFDownload from "@/components/ClientPDFDownload";
 import PDFDocument from "@/components/PDFDocument";
 import { useFormStore } from "../store/useFormStore";
 
@@ -54,13 +54,13 @@ export default function PreviewPage() {
             Back
   
           </button>
-       <PDFDownloadLink
+       <ClientPDFDownload
   document={<PDFDocument />}
   fileName="form-details.pdf"
   className="flex-1 flex justify-center items-center gap-2 bg-gradient-to-r from-green-700 to-green-600 text-white py-2 rounded-lg font-semibold hover:opacity-90"
 >
   {/* Child content inside link */}
-  {({ loading }) =>
+  {({ loading }: { loading: boolean }) =>
     loading ? (
       "Preparing..."
     ) : (
@@ -74,7 +74,7 @@ export default function PreviewPage() {
       </>
     )
   }
-</PDFDownloadLink>
+</ClientPDFDownload>
 
         </div>
       </div>
