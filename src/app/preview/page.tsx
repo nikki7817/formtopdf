@@ -69,7 +69,7 @@ export default function PreviewPage() {
     ) : (
       <>
         <Image
-          src="/icons/download.svg"
+          src="/icons/Download.svg"
           alt="Download"
           width={20}
           height={20}
