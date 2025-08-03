@@ -1,103 +1,199 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useRouter } from "next/navigation";
+import { useFormStore } from "./store/useFormStore";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PDFDocument from "@/components/PDFDocument";
+import { useState } from "react";
+
+export default function FormPage() {
+  const router = useRouter();
+  const { name, email, phone, position, description, setField } = useFormStore();
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  // Validation
+  const validate = () => {
+    const errs: { [key: string]: string } = {};
+    if (!name) errs.name = "Name is required";
+    if (!email) errs.email = "Email is required";
+    else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) errs.email = "Invalid email";
+    if (!phone) errs.phone = "Phone is required";
+    else if (phone.length < 10) errs.phone = "Phone must be at least 10 digits";
+    return errs;
+  };
+
+  const handleViewPDF = () => {
+    const errs = validate();
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
+    router.push("/preview");
+  };
+
+  // Helper to check if form is valid (for download button)
+  const isFormValid = () => {
+    return !Object.keys(validate()).length;
+  };
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="max-w-md w-full p-6">
+        <h1 className="text-2xl font-bold text-center mb-8">Add Your Details</h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        {/* Input Fields */}
+        <div className="space-y-4">
+          {/* Name */}
+          <div>
+            <label className="text-sm font-semibold">Name</label>
+            <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm mt-1">
+              <img
+      src="/icons/user.svg"
+      alt="User"
+      className="w-5 h-5 text-gray-400 mr-2"
+    />
+              <input
+                type="text"
+                placeholder="e.g. John Doe"
+                value={name}
+                onChange={(e) => setField("name", e.target.value)}
+                className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400"
+              />
+            </div>
+            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="text-sm font-semibold">Email</label>
+            <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm mt-1">
+               <img
+      src="/icons/mail.svg"
+      alt="User"
+      className="w-5 h-5 text-gray-400 mr-2"
+    />
+              <input
+                type="email"
+                placeholder="e.g. Johndoe@gmail.com"
+                value={email}
+                onChange={(e) => setField("email", e.target.value)}
+                className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400"
+              />
+            </div>
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          </div>
+
+          {/* Phone */}
+          <div>
+            <label className="text-sm font-semibold">Phone Number</label>
+            <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm mt-1">
+               <img
+      src="/icons/phone-call.svg"
+      alt="User"
+      className="w-5 h-5 text-gray-400 mr-2"
+    />
+              <input
+                type="text"
+                placeholder="e.g. (220) 222 -20002"
+                value={phone}
+                onChange={(e) => setField("phone", e.target.value)}
+                className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400"
+              />
+            </div>
+            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+          </div>
+
+          {/* Position */}
+          <div>
+            <label className="text-sm font-semibold">Position</label>
+            <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm mt-1">
+               <img
+      src="/icons/position.svg"
+      alt="User"
+      className="w-5 h-5 text-gray-400 mr-2"
+    />
+              <input
+                type="text"
+                placeholder="e.g. Junior Front end Developer"
+                value={position}
+                onChange={(e) => setField("position", e.target.value)}
+                className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400"
+              />
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="text-sm font-semibold">Description</label>
+            <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm mt-1">
+               <img
+      src="/icons/Description.svg"
+      alt="User"
+      className="w-5 h-5 text-gray-400 mr-2"
+    />
+              <textarea
+                placeholder="e.g. Work experiences"
+                value={description}
+                onChange={(e) => setField("description", e.target.value)}
+                className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400 resize-none"
+              />
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+        {/* Buttons */}
+        <div className="flex gap-4 mt-6">
+          {/* View PDF Button */}
+          <button
+            onClick={handleViewPDF}
+            className="flex-1 flex justify-center items-center gap-2 bg-gradient-to-r from-green-700 to-green-600 text-white py-2 rounded-lg font-semibold hover:opacity-90"
+          >
+             <img
+      src="/icons/view.svg"
+      alt="User"
+      className="w-5 h-5 text-gray-400 mr-2"
+    />
+            View PDF
+          </button>
+
+          {/* Download PDF Button using React-PDF */}
+{isFormValid() ? (
+  <PDFDownloadLink
+    document={<PDFDocument />}
+    fileName="form-details.pdf"
+    className="flex-1 flex justify-center items-center gap-2 bg-gradient-to-r from-green-700 to-green-600 text-white py-2 rounded-lg font-semibold hover:opacity-90 text-center"
+  >
+    {({ loading }) =>
+      loading ? (
+        "Preparing..."
+      ) : (
+        <>
+          <img
+            src="/icons/download.svg"
+            alt="Download"
+            className="w-5 h-5 mr-2"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Download PDF
+        </>
+      )
+    }
+  </PDFDownloadLink>
+) : (
+  <button
+    disabled
+    className="flex-1 flex justify-center items-center gap-2 bg-gray-400 text-white py-2 rounded-lg font-semibold cursor-not-allowed"
+  >
+    <img
+      src="/icons/download.svg"
+      alt="Download"
+      className="w-5 h-5 mr-2"
+    />
+    Download PDF
+  </button>
+)}
+
+        </div>
+      </div>
     </div>
   );
 }
