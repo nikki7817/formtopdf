@@ -1,11 +1,22 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { ComponentProps } from "react";
+import { ReactNode, ComponentType } from "react";
 
-// Dynamically import PDFDownloadLink to prevent SSR issues
-const PDFDownloadLink = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFDownloadLink),
+// Define the props interface
+interface ClientPDFDownloadProps {
+  document: ReactNode;
+  fileName: string;
+  className?: string;
+  children: (props: { loading: boolean }) => ReactNode;
+}
+
+// Create a wrapper component to handle the dynamic import
+const DynamicPDFDownloadLink = dynamic(
+  async () => {
+    const { PDFDownloadLink } = await import("@react-pdf/renderer");
+    return { default: PDFDownloadLink as ComponentType<any> };
+  },
   {
     ssr: false,
     loading: () => (
@@ -24,17 +35,6 @@ const PDFDownloadLink = dynamic(
   }
 );
 
-// Type for PDFDownloadLink props
-type PDFDownloadLinkProps = ComponentProps<typeof PDFDownloadLink>;
-
-interface ClientPDFDownloadProps extends Omit<PDFDownloadLinkProps, 'children'> {
-  children: (props: { loading: boolean }) => React.ReactNode;
-}
-
-export default function ClientPDFDownload({ children, ...props }: ClientPDFDownloadProps) {
-  return (
-    <PDFDownloadLink {...props}>
-      {children}
-    </PDFDownloadLink>
-  );
+export default function ClientPDFDownload(props: ClientPDFDownloadProps) {
+  return <DynamicPDFDownloadLink {...props} />;
 }
