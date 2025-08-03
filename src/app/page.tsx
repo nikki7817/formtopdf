@@ -5,6 +5,7 @@ import { useFormStore } from "./store/useFormStore";
 import ClientPDFDownload from "@/components/ClientPDFDownload";
 import PDFDocument from "@/components/PDFDocument";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function FormPage() {
   const router = useRouter();
@@ -47,11 +48,13 @@ export default function FormPage() {
           <div>
             <label className="text-sm font-semibold">Name</label>
             <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm mt-1">
-              <img
-      src="/icons/user.svg"
-      alt="User"
-      className="w-5 h-5 text-gray-400 mr-2"
-    />
+              <Image
+                src="/icons/user.svg"
+                alt="User"
+                width={20}
+                height={20}
+                className="text-gray-400 mr-2"
+              />
               <input
                 type="text"
                 placeholder="e.g. John Doe"
@@ -67,11 +70,13 @@ export default function FormPage() {
           <div>
             <label className="text-sm font-semibold">Email</label>
             <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm mt-1">
-               <img
-      src="/icons/mail.svg"
-      alt="User"
-      className="w-5 h-5 text-gray-400 mr-2"
-    />
+               <Image
+                src="/icons/mail.svg"
+                alt="Mail"
+                width={20}
+                height={20}
+                className="text-gray-400 mr-2"
+              />
               <input
                 type="email"
                 placeholder="e.g. Johndoe@gmail.com"
@@ -87,11 +92,13 @@ export default function FormPage() {
           <div>
             <label className="text-sm font-semibold">Phone Number</label>
             <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm mt-1">
-               <img
-      src="/icons/phone-call.svg"
-      alt="User"
-      className="w-5 h-5 text-gray-400 mr-2"
-    />
+               <Image
+                src="/icons/phone-call.svg"
+                alt="Phone"
+                width={20}
+                height={20}
+                className="text-gray-400 mr-2"
+              />
               <input
                 type="text"
                 placeholder="e.g. (220) 222 -20002"
@@ -107,11 +114,13 @@ export default function FormPage() {
           <div>
             <label className="text-sm font-semibold">Position</label>
             <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm mt-1">
-               <img
-      src="/icons/position.svg"
-      alt="User"
-      className="w-5 h-5 text-gray-400 mr-2"
-    />
+               <Image
+                src="/icons/position.svg"
+                alt="Position"
+                width={20}
+                height={20}
+                className="text-gray-400 mr-2"
+              />
               <input
                 type="text"
                 placeholder="e.g. Junior Front end Developer"
@@ -126,11 +135,13 @@ export default function FormPage() {
           <div>
             <label className="text-sm font-semibold">Description</label>
             <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm mt-1">
-               <img
-      src="/icons/Description.svg"
-      alt="User"
-      className="w-5 h-5 text-gray-400 mr-2"
-    />
+               <Image
+                src="/icons/Description.svg"
+                alt="Description"
+                width={20}
+                height={20}
+                className="text-gray-400 mr-2"
+              />
               <textarea
                 placeholder="e.g. Work experiences"
                 value={description}
@@ -148,11 +159,13 @@ export default function FormPage() {
             onClick={handleViewPDF}
             className="flex-1 flex justify-center items-center gap-2 bg-gradient-to-r from-green-700 to-green-600 text-white py-2 rounded-lg font-semibold hover:opacity-90"
           >
-             <img
-      src="/icons/view.svg"
-      alt="User"
-      className="w-5 h-5 text-gray-400 mr-2"
-    />
+             <Image
+                src="/icons/view.svg"
+                alt="View"
+                width={20}
+                height={20}
+                className="text-gray-400 mr-2"
+              />
             View PDF
           </button>
 
@@ -168,10 +181,12 @@ export default function FormPage() {
         "Preparing..."
       ) : (
         <>
-          <img
+          <Image
             src="/icons/download.svg"
             alt="Download"
-            className="w-5 h-5 mr-2"
+            width={20}
+            height={20}
+            className="mr-2"
           />
           Download PDF
         </>
@@ -183,10 +198,12 @@ export default function FormPage() {
     disabled
     className="flex-1 flex justify-center items-center gap-2 bg-gray-400 text-white py-2 rounded-lg font-semibold cursor-not-allowed"
   >
-    <img
+    <Image
       src="/icons/download.svg"
       alt="Download"
-      className="w-5 h-5 mr-2"
+      width={20}
+      height={20}
+      className="mr-2"
     />
     Download PDF
   </button>

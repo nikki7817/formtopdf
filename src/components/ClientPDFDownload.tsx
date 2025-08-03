@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { ReactNode, ComponentType } from "react";
+import Image from "next/image";
 
 // Define the props interface
 interface ClientPDFDownloadProps {
@@ -15,7 +16,7 @@ interface ClientPDFDownloadProps {
 const DynamicPDFDownloadLink = dynamic(
   async () => {
     const { PDFDownloadLink } = await import("@react-pdf/renderer");
-    return { default: PDFDownloadLink as ComponentType<any> };
+    return { default: PDFDownloadLink as ComponentType<ClientPDFDownloadProps> };
   },
   {
     ssr: false,
@@ -24,10 +25,12 @@ const DynamicPDFDownloadLink = dynamic(
         disabled
         className="flex-1 flex justify-center items-center gap-2 bg-gray-400 text-white py-2 rounded-lg font-semibold cursor-not-allowed"
       >
-        <img
+        <Image
           src="/icons/download.svg"
           alt="Download"
-          className="w-5 h-5 mr-2"
+          width={20}
+          height={20}
+          className="mr-2"
         />
         Loading...
       </button>

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import ClientPDFDownload from "@/components/ClientPDFDownload";
 import PDFDocument from "@/components/PDFDocument";
 import { useFormStore } from "../store/useFormStore";
+import Image from "next/image";
 
 export default function PreviewPage() {
   const router = useRouter();
@@ -46,11 +47,13 @@ export default function PreviewPage() {
             className="flex-1 flex justify-center items-center gap-2 bg-gray-400 text-white py-2 rounded-lg font-semibold hover:opacity-90"
           >
 
-                       <img
-      src="/icons/chevron-left.svg"
-      alt="User"
-      className="w-5 h-5 text-gray-400 mr-2"
-    />
+                       <Image
+                        src="/icons/chevron-left.svg"
+                        alt="Back"
+                        width={20}
+                        height={20}
+                        className="text-gray-400 mr-2"
+                      />
             Back
   
           </button>
@@ -65,10 +68,12 @@ export default function PreviewPage() {
       "Preparing..."
     ) : (
       <>
-        <img
+        <Image
           src="/icons/download.svg"
           alt="Download"
-          className="w-5 h-5 mr-2"
+          width={20}
+          height={20}
+          className="mr-2"
         />
         Download PDF
       </>
